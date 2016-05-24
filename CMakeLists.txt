@@ -5,9 +5,10 @@ set (Contacts_PACKAGE Contacts)
 set (Contacts_VERSION_MAJOR 0)
 set (Contacts_VERSION_MINOR 0)
 set (Contacts_VERSION_PATCH 1)
+set (Contacts_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include")
 
 configure_file (
-  "${PROJECT_SOURCE_DIR}/config.h.in"
+  "${Contacts_INCLUDE_DIR}/config.h.in"
   "${PROJECT_BINARY_DIR}/config.h"
   )
 
@@ -18,6 +19,7 @@ set(TIZEN_INCLUDE_PATH "${TIZEN_PATH}/usr/include")
 
 include_directories(
   "${PROJECT_BINARY_DIR}"
+  "${Contacts_INCLUDE_DIR}"
   "${TIZEN_INCLUDE_PATH}/dlog"
   "${TIZEN_INCLUDE_PATH}/elementary-1"
   "${TIZEN_INCLUDE_PATH}/eina-1"
@@ -41,7 +43,7 @@ find_library(LIBELEMENTARY NAMES elementary)
 find_library(LIBEVAS NAMES evas)
 find_library(LIBCONTACTSSERVICE NAMES contacts-service2)
 
-add_executable(contacts main.c)
+add_executable(contacts main.c ui_list.c ui_show.c ui_create.c)
 target_link_libraries(
   contacts
   "${LIBDLOG}"
