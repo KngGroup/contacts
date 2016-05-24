@@ -63,7 +63,7 @@ void contact_repository_create(contact_s *contact) {
     contacts_record_set_str(number, _contacts_number.number, contact->phone);
     contacts_record_add_child_record(contact_record, _contacts_contact.number, number);
     
-    contacts_db_insert_record(contact, &id);
+    contacts_db_insert_record(contact_record, &id);
     
     contacts_disconnect_on_thread();
 }

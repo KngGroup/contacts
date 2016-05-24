@@ -1,5 +1,6 @@
 #include "ui_list.h"
 #include "ui_show.h"
+#include "ui_create.h"
 
 static char *genlist_text_get(void *data, Evas_Object *obj, const char *part) {
     if (strcmp(part, "elm.text") == 0) {
@@ -48,9 +49,19 @@ static Evas_Object *ui_create_list(appdata_s *ad, Eina_List *contacts) {
     return ui_list;
 }
 
+void add_contact_btn_on_click(void *data, Evas_Object *obj, void *event_info) {
+    appdata_s *ad = (appdata_s *) data;
+    ui_show_create_page(ad);
+}
+
 void ui_show_list_page(appdata_s *ad) {
     Eina_List *contacts = contact_repository_find_all();
     Evas_Object *list   = ui_create_list(ad, contacts);
     
-    elm_naviframe_item_push(ad->naviframe, "Contacts", NULL, NULL, list, NULL);
+    Evas_Object *add_contact_btn = elm_button_add(ad->naviframe);
+    elm_object_text_set(add_contact_btn, "+");
+    evas_object_size_hint_min_set(add_contact_btn, 64, 64);
+    evas_object_smart_callback_add(add_contact_btn, "clicked", add_contact_btn_on_click, ad);
+    
+    elm_naviframe_item_push(ad->naviframe, "Contacts", NULL, add_contact_btn, list, NULL);
 }
