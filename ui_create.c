@@ -15,6 +15,9 @@ void create_btn_on_click(void *data, Evas_Object *obj, void *event_info) {
     contact.phone = strdup(elm_object_text_get(contact_form->phone));
     
     contact_repository_create(&contact);
+    free(contact.firstname);
+    free(contact.lastname);
+    free(contact.phone);
     elm_naviframe_item_pop(contact_form->ad->naviframe);
     
     free(contact_form);
