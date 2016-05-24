@@ -25,6 +25,7 @@ Eina_List *contact_repository_find_all() {
         contacts_list_next(contact_list);
     }
 
+    contacts_disconnect_on_thread();
     return result;
 }
 
@@ -34,9 +35,35 @@ void contact_repository_list_free(Eina_List *list) {
     
     EINA_LIST_FOREACH(list, l, contact) {
         free(contact->display_name);
+        free(contact->firstname);
+        free(contact->lastname);
+        free(contact->phone);
         free(contact);
     }
     
     eina_list_free(list);
 }
 
+void contact_repository_create(contact_s *contact) {
+    int id = -1;
+    contacts_record_h contact_record;
+    contacts_record_h name;
+    contacts_record_h number;
+    
+    contacts_connect_on_thread();
+
+    contacts_record_create(_contacts_contact._uri, &contact_record);
+    contacts_record_create(_contacts_name._uri, &name);
+
+    contacts_record_set_str(name, _contacts_name.first, contact->firstname);
+    contacts_record_set_str(name, _contacts_name.last, contact->lastname);
+    contacts_record_add_child_record(contact_record, _contacts_contact.name, name);
+
+    contacts_record_create(_contacts_number._uri, &number);
+    contacts_record_set_str(number, _contacts_number.number, contact->phone);
+    contacts_record_add_child_record(contact_record, _contacts_contact.number, number);
+    
+    contacts_db_insert_record(contact, &id);
+    
+    contacts_disconnect_on_thread();
+}
