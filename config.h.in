@@ -1,0 +1,5 @@
+#define VERSION_MAJOR @Contacts_VERSION_MAJOR@
+#define VERSION_MINOR @Contacts_VERSION_MINOR@
+#define VERSION_PATCH @Contacts_VERSION_PATCH@
+
+#define PACKAGE "@Contacts_PACKAGE@"
