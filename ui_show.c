@@ -28,7 +28,7 @@ static Evas_Object *create_contact_page(appdata_s *appdata, char *name) {
     return vbox;
 }
 
-void ui_show_contact_page(appdata_s *ad, char *name) {
-    Evas_Object *contact_page = create_contact_page(ad, name);
+void ui_show_contact_page(appdata_s *ad, contact_s *contact) {
+    Evas_Object *contact_page = create_contact_page(ad, contact->display_name);
     elm_naviframe_item_push(ad->naviframe, "Edit Contact", NULL, NULL, contact_page, NULL);
 }

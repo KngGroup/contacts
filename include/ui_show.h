@@ -4,7 +4,7 @@
 
 #include "main.h"
 
-void ui_show_contact_page(appdata_s *ad, char *name);
+void ui_show_contact_page(appdata_s *ad, contact_s *contact);
 
 #endif /* UI_SHOW_H */
 

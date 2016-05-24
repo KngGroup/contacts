@@ -42,12 +42,14 @@ find_library(LIBDLOG NAMES dlog)
 find_library(LIBELEMENTARY NAMES elementary)
 find_library(LIBEVAS NAMES evas)
 find_library(LIBCONTACTSSERVICE NAMES contacts-service2)
+find_library(LIBEINA NAMES eina)
 
-add_executable(contacts main.c ui_list.c ui_show.c ui_create.c)
+add_executable(contacts main.c ui_list.c ui_show.c ui_create.c contact_repository.c)
 target_link_libraries(
   contacts
   "${LIBDLOG}"
   "${LIBELEMENTARY}"
   "${LIBEVAS}"
   "${LIBCONTACTSSERVICE}"
+  "${LIBEINA}"
 )
