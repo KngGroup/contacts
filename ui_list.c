@@ -49,7 +49,7 @@ static Evas_Object *ui_create_list(appdata_s *ad, Eina_List *contacts) {
     return ui_list;
 }
 
-void add_contact_btn_on_click(void *data, Evas_Object *obj, void *event_info) {
+static void add_contact_btn_on_click(void *data, Evas_Object *obj, void *event_info) {
     appdata_s *ad = (appdata_s *) data;
     ui_show_create_page(ad);
 }
