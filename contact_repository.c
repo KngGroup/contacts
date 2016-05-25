@@ -67,3 +67,9 @@ void contact_repository_create(contact_s *contact) {
     
     contacts_disconnect_on_thread();
 }
+
+void contact_repository_delete(int id) {
+    contacts_connect_on_thread();
+    contacts_db_delete_record(_contacts_person._uri, id);
+    contacts_disconnect_on_thread();
+}
