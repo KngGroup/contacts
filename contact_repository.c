@@ -110,3 +110,23 @@ char *contact_repository_get_phone_by_id(int id) {
     
     return phone;
 }
+
+void contact_repository_update(contact_s *contact) {
+    contacts_record_h contact_record;
+    contacts_record_h name;
+    contacts_record_h phone;
+
+    contacts_connect_on_thread();
+    contacts_db_get_record(_contacts_contact._uri, contact->id, &contact_record);
+    
+    contacts_record_get_child_record_at_p(contact_record, _contacts_contact.name, 0, &name);
+    contacts_record_set_str(name, _contacts_name.first, contact->firstname);
+    contacts_record_set_str(name, _contacts_name.last, contact->lastname);
+    
+    contacts_record_get_child_record_at_p(contact_record, _contacts_contact.number, 0, &phone);
+    contacts_record_set_str(phone, _contacts_number.number, contact->phone);
+    
+    contacts_db_update_record(contact_record);
+    
+    contacts_disconnect_on_thread();
+}
