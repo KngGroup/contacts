@@ -24,6 +24,8 @@ Eina_List *contact_repository_find_all() {
         result = eina_list_append(result, contact);
         contacts_list_next(contact_list);
     }
+    
+    contacts_list_destroy(contact_list, EINA_TRUE);
 
     contacts_disconnect_on_thread();
     return result;
