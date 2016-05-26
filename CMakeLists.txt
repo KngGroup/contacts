@@ -43,6 +43,7 @@ find_library(LIBELEMENTARY NAMES elementary)
 find_library(LIBEVAS NAMES evas)
 find_library(LIBCONTACTSSERVICE NAMES contacts-service2)
 find_library(LIBEINA NAMES eina)
+find_library(LIBEDJE NAMES edje)
 
 add_executable(contacts main.c ui_list.c ui_show.c ui_create.c contact_repository.c)
 target_link_libraries(
@@ -52,4 +53,5 @@ target_link_libraries(
   "${LIBEVAS}"
   "${LIBCONTACTSSERVICE}"
   "${LIBEINA}"
+  "${LIBEDJE}"
 )
