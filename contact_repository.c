@@ -73,3 +73,38 @@ void contact_repository_delete(int id) {
     contacts_db_delete_record(_contacts_person._uri, id);
     contacts_disconnect_on_thread();
 }
+
+char *contact_repository_get_phone_by_id(int id) {
+    contacts_query_h query = NULL;
+    contacts_filter_h filter = NULL;
+    contacts_list_h list = NULL;
+    contacts_record_h record_person_number = NULL;
+    char *phone;
+    
+    contacts_connect_on_thread();
+    
+    contacts_query_create(_contacts_person_number._uri, &query);
+    contacts_filter_create(_contacts_person_number._uri, &filter);
+    contacts_filter_add_int(filter, _contacts_person_number.person_id, CONTACTS_MATCH_EQUAL, id);
+    contacts_filter_add_operator(filter, CONTACTS_FILTER_OPERATOR_AND);
+    contacts_filter_add_bool(filter, _contacts_person_number.is_primary_default, EINA_TRUE);
+    contacts_query_set_filter(query, filter);
+
+    // Run the query: Retrieve the phone number records containing the default phone number
+    contacts_db_get_records_with_query(query, 0, 0, &list);
+
+    // Retrieve the current record from the query list
+    contacts_list_get_current_record_p(list, &record_person_number);
+
+    // Retrieve the phone number from the phone number record
+    contacts_record_get_str(record_person_number, _contacts_person_number.number, &phone);
+
+    // Destroy the list, filter, and query handles and release all their resources
+    contacts_list_destroy(list, EINA_TRUE);
+    contacts_filter_destroy(filter);
+    contacts_query_destroy(query);
+
+    contacts_disconnect_on_thread();
+    
+    return phone;
+}

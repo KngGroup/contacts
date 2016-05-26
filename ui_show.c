@@ -58,7 +58,7 @@ static Evas_Object *create_contact_page(ui_show_page_data_s *page_data) {
     evas_object_size_hint_align_set(id_value_label, 0, 0);
     evas_object_show(id_value_label);
     elm_box_pack_end(id_hbox, id_value_label);
-    
+
     elm_box_pack_end(vbox, id_hbox);
 
     //name
@@ -70,7 +70,7 @@ static Evas_Object *create_contact_page(ui_show_page_data_s *page_data) {
     evas_object_show(name_hbox);
     
     name_label = elm_label_add(name_hbox);
-    elm_object_text_set(id_label, "Name: ");
+    elm_object_text_set(name_label, "Name: ");
     evas_object_size_hint_weight_set(name_label, 0, 0);
     evas_object_size_hint_align_set(name_label, 0, 0);
     evas_object_show(name_label);
@@ -84,6 +84,30 @@ static Evas_Object *create_contact_page(ui_show_page_data_s *page_data) {
     elm_box_pack_end(name_hbox, name_value_label);
     
     elm_box_pack_end(vbox, name_hbox);
+    
+    //phone
+    phone_hbox = elm_box_add(vbox);
+    elm_box_horizontal_set(phone_hbox, EINA_TRUE);
+    elm_box_padding_set(phone_hbox, 5, 5);
+    evas_object_size_hint_weight_set(phone_hbox, EVAS_HINT_EXPAND, 0);
+    evas_object_size_hint_align_set(phone_hbox, EVAS_HINT_FILL, 0);
+    evas_object_show(phone_hbox);
+    
+    phone_label = elm_label_add(phone_hbox);
+    elm_object_text_set(phone_label, "Phone: ");
+    evas_object_size_hint_weight_set(phone_label, 0, 0);
+    evas_object_size_hint_align_set(phone_label, 0, 0);
+    evas_object_show(phone_label);
+    elm_box_pack_end(phone_hbox, phone_label);
+    
+    phone_value_label = elm_label_add(phone_hbox);
+    elm_object_text_set(phone_value_label, page_data->contact->phone);
+    evas_object_size_hint_weight_set(phone_value_label, 0, 0);
+    evas_object_size_hint_align_set(phone_value_label, 0, 0);
+    evas_object_show(phone_value_label);
+    elm_box_pack_end(phone_hbox, phone_value_label);
+    
+    elm_box_pack_end(vbox, phone_hbox);
     
     delete_btn = elm_button_add(vbox);
     elm_object_text_set(delete_btn, "Delete");
@@ -102,6 +126,9 @@ static void back_btn_on_click(void *data, Evas_Object *obj, void *event_info) {
 }
 
 void ui_show_contact_page(appdata_s *ad, contact_s *contact) {
+    free(contact->phone);
+    contact->phone = contact_repository_get_phone_by_id(contact->id);
+    
     ui_show_page_data_s *page_data = malloc(sizeof(ui_show_page_data_s));
     page_data->appdata = ad;
     page_data->contact = contact;
