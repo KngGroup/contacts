@@ -65,13 +65,6 @@ static Evas_Object *create_contact_page(ui_show_page_data_s *page_data) {
     spacer = elm_ext_spacer_add(vbox);
     elm_box_pack_end(vbox, spacer);
     
-    box_append_label(vbox, "ID: ");
-    size_t id_len = 10;
-    char id[id_len];
-    snprintf(id, id_len, "%d", page_data->contact->id);
-    box_append_label_value(vbox, id);
-    box_append_separator(vbox);
-
     box_append_label(vbox, "Name: ");
     box_append_label_value(vbox, page_data->contact->display_name);
     box_append_separator(vbox);
@@ -83,6 +76,7 @@ static Evas_Object *create_contact_page(ui_show_page_data_s *page_data) {
     
     delete_btn = elm_button_add(vbox);
     elm_object_text_set(delete_btn, "Delete");
+    elm_object_style_set(delete_btn, "red");
     evas_object_smart_callback_add(delete_btn, "clicked", delete_btn_on_click, page_data);
     evas_object_size_hint_weight_set(delete_btn, EVAS_HINT_EXPAND, 0);
     evas_object_size_hint_align_set(delete_btn, EVAS_HINT_FILL, 0);
