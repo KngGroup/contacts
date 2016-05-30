@@ -11,6 +11,7 @@
 
 typedef struct appdata {
     Evas_Object *win;
+    Evas_Object *conformant;
     Evas_Object *naviframe;
 } appdata_s;
 

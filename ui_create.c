@@ -64,9 +64,14 @@ Evas_Object *ui_create_page(appdata_s *ad) {
     evas_object_show(contact_form->phone);
     evas_object_show(create_btn);
     
+    elm_ext_vbox_add_separator(vbox);
     elm_box_pack_end(vbox, contact_form->firstname);
+    elm_ext_vbox_add_separator(vbox);
     elm_box_pack_end(vbox, contact_form->lastname);
+    elm_ext_vbox_add_separator(vbox);
     elm_box_pack_end(vbox, contact_form->phone);
+    elm_ext_vbox_add_separator(vbox);
+    
     elm_box_pack_end(vbox, create_btn);
     
     return vbox;

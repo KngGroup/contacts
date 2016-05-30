@@ -23,9 +23,13 @@ void create_gui(appdata_s *ad) {
     ad->win = elm_win_util_standard_add(PACKAGE, PACKAGE);
     elm_win_autodel_set(ad->win, EINA_TRUE);
     
+    ad->conformant = elm_conformant_add(ad->win);
+    evas_object_size_hint_weight_set(ad->conformant, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+    elm_win_resize_object_add(ad->win, ad->conformant);
+    evas_object_show(ad->conformant);
+    
     ad->naviframe = elm_naviframe_add(ad->win);
-    evas_object_size_hint_weight_set(ad->naviframe, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-    elm_win_resize_object_add(ad->win, ad->naviframe);
+    elm_object_content_set(ad->conformant, ad->naviframe);
     evas_object_show(ad->naviframe);
     
     Evas_Object *g; // Gesture layer object
