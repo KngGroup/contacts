@@ -45,7 +45,7 @@ find_library(LIBCONTACTSSERVICE NAMES contacts-service2)
 find_library(LIBEINA NAMES eina)
 find_library(LIBEDJE NAMES edje)
 
-add_executable(contacts main.c ui_list.c ui_show.c ui_create.c contact_repository.c)
+add_executable(contacts main.c ui_list.c ui_show.c ui_create.c contact_repository.c elm_ext.c)
 target_link_libraries(
   contacts
   "${LIBDLOG}"

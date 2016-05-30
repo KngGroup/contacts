@@ -6,6 +6,7 @@
 #include <Eina.h>
 #include <contacts.h>
 #include "config.h"
+#include "elm_ext.h"
 #include "contact_repository.h"
 
 typedef struct appdata {
