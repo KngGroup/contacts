@@ -21,3 +21,19 @@ Evas_Object *elm_ext_separator_add(Evas_Object *parent) {
     
     return separator;
 }
+
+Evas_Object *elm_ext_vbox_add_separator(Evas_Object *box) {
+    Evas_Object *spacer, *separator;
+    
+    spacer = elm_ext_spacer_add(box);
+    elm_box_pack_end(box, spacer);
+    
+    separator = elm_ext_separator_add(box);
+    elm_box_pack_end(box, separator);
+    evas_object_show(separator);
+    
+    spacer = elm_ext_spacer_add(box);
+    elm_box_pack_end(box, spacer);
+    
+    return separator;
+}

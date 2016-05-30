@@ -12,20 +12,6 @@ void delete_btn_on_click(void *data, Evas_Object *obj, void *event_info) {
     free(page_data);
 }
 
-void static box_append_separator(Evas_Object *box) {
-    Evas_Object *spacer, *separator;
-    
-    spacer = elm_ext_spacer_add(box);
-    elm_box_pack_end(box, spacer);
-    
-    separator = elm_ext_separator_add(box);
-    elm_box_pack_end(box, separator);
-    evas_object_show(separator);
-    
-    spacer = elm_ext_spacer_add(box);
-    elm_box_pack_end(box, spacer);
-}
-
 Evas_Object static *box_append_label(Evas_Object *box, char *label_text) {
     Evas_Object *label;
     
@@ -67,7 +53,7 @@ static Evas_Object *create_contact_page(ui_show_page_data_s *page_data) {
     
     box_append_label(vbox, "Name: ");
     box_append_label_value(vbox, page_data->contact->display_name);
-    box_append_separator(vbox);
+    elm_ext_vbox_add_separator(vbox);
 
     box_append_label(vbox, "Phone: ");
     box_append_label_value(vbox, page_data->contact->phone);
