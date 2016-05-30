@@ -25,6 +25,7 @@ static void genlist_selected_cb(void *data, Evas_Object *obj, void *event_info) 
     contact_s *contact  = elm_object_item_data_get(it);
     
     ui_show_contact_page(ad, contact);
+    elm_genlist_item_selected_set(it, EINA_FALSE);
 }
 
 
