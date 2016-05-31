@@ -4,7 +4,7 @@ project (Contacts)
 set (Contacts_PACKAGE Contacts)
 set (Contacts_VERSION_MAJOR 0)
 set (Contacts_VERSION_MINOR 0)
-set (Contacts_VERSION_PATCH 1)
+set (Contacts_VERSION_PATCH 2)
 set (Contacts_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include")
 
 configure_file (
