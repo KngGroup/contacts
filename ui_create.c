@@ -5,6 +5,7 @@ typedef struct contact_form {
     Evas_Object *lastname;
     Evas_Object *phone;
     appdata_s *ad;
+    ui_list_page_data_s *ui_list_page_data;
 } contact_form_s;
 
 void create_btn_on_click(void *data, Evas_Object *obj, void *event_info) {
@@ -18,12 +19,14 @@ void create_btn_on_click(void *data, Evas_Object *obj, void *event_info) {
     free(contact.firstname);
     free(contact.lastname);
     free(contact.phone);
+    
+    ui_list_refresh_contacts(contact_form->ui_list_page_data);
     elm_naviframe_item_pop(contact_form->ad->naviframe);
     
     free(contact_form);
 }
 
-Evas_Object *ui_create_page(appdata_s *ad) {
+static Evas_Object *ui_create_page(appdata_s *ad, ui_list_page_data_s *ui_list_page_data) {
     contact_form_s *contact_form;
     Evas_Object *vbox;
     Evas_Object *create_btn;
@@ -37,7 +40,9 @@ Evas_Object *ui_create_page(appdata_s *ad) {
     contact_form->lastname  = elm_entry_add(vbox);
     contact_form->phone     = elm_entry_add(vbox);
     contact_form->ad        = ad;
-    create_btn              = elm_button_add(vbox);
+    contact_form->ui_list_page_data = ui_list_page_data;
+    
+    create_btn = elm_button_add(vbox);
     elm_object_text_set(create_btn, "Create");
     evas_object_smart_callback_add(create_btn, "clicked", create_btn_on_click, contact_form);
     
@@ -77,8 +82,8 @@ Evas_Object *ui_create_page(appdata_s *ad) {
     return vbox;
 }
 
-void ui_show_create_page(appdata_s *ad) {
-    Evas_Object *page = ui_create_page(ad);
+void ui_show_create_page(appdata_s *ad, ui_list_page_data_s *ui_list_page_data) {
+    Evas_Object *page = ui_create_page(ad, ui_list_page_data);
     
     elm_naviframe_item_push(ad->naviframe, "Create", NULL, NULL, page, NULL);
 }

@@ -3,11 +3,13 @@
 typedef struct ui_show_page_data {
     appdata_s *appdata;
     contact_s *contact;
+    ui_list_page_data_s *ui_list_page_data;
 } ui_show_page_data_s;
 
 void delete_btn_on_click(void *data, Evas_Object *obj, void *event_info) {
     ui_show_page_data_s *page_data = (ui_show_page_data_s *) data;
     contact_repository_delete(page_data->contact->id);
+    ui_list_refresh_contacts(page_data->ui_list_page_data);
     elm_naviframe_item_pop(page_data->appdata->naviframe);
     free(page_data);
 }
@@ -72,13 +74,14 @@ static Evas_Object *create_contact_page(ui_show_page_data_s *page_data) {
     return vbox;
 }
 
-void ui_show_contact_page(appdata_s *ad, contact_s *contact) {
+void ui_show_contact_page(appdata_s *ad, contact_s *contact, ui_list_page_data_s *ui_list_page_data) {
     free(contact->phone);
     contact->phone = contact_repository_get_phone_by_id(contact->id);
 
     ui_show_page_data_s *page_data = malloc(sizeof (ui_show_page_data_s));
     page_data->appdata = ad;
     page_data->contact = contact;
+    page_data->ui_list_page_data = ui_list_page_data;
 
     Evas_Object *contact_page = create_contact_page(page_data);
 

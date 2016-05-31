@@ -7,7 +7,10 @@ static Evas_Event_Flags guesture_on_line_end(void *data, void *event_info) {
             p->angle, p->momentum.x1, p->momentum.y1, p->momentum.x2, p->momentum.y2,
             p->momentum.tx, p->momentum.ty, p->momentum.n);
 
-    if (p->angle > 170 && p->angle < 200 && p->momentum.y1 > 40 && p->momentum.y1 < 110) {
+    if (p->angle > 170 && p->angle < 200 && p->momentum.y1 > 40 && p->momentum.y1 < 110
+        ||     
+        p->angle > 70 && p->angle < 105
+    ) {
         appdata_s *ad = (appdata_s *) data;
         elm_naviframe_item_pop(ad->naviframe);
 
@@ -15,7 +18,7 @@ static Evas_Event_Flags guesture_on_line_end(void *data, void *event_info) {
             elm_exit();
         }
     }
-
+    
     return EVAS_EVENT_FLAG_ON_HOLD;
 }
 
