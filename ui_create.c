@@ -21,6 +21,7 @@ void create_btn_on_click(void *data, Evas_Object *obj, void *event_info) {
     
     contact->firstname = strdup(elm_object_text_get(contact_form->firstname));
     contact->lastname = strdup(elm_object_text_get(contact_form->lastname));
+    contact->note = strdup(elm_object_text_get(contact_form->note));
     
     EINA_LIST_FOREACH(contact_form->numbers, l, phone_entry) {
         contact->phone_numbers = eina_list_append(contact->phone_numbers, strdup(elm_object_text_get(phone_entry)));
