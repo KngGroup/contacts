@@ -4,6 +4,8 @@ typedef struct contact_form {
     Evas_Object *firstname;
     Evas_Object *lastname;
     Eina_List *numbers;
+    Eina_List *emails;
+    Evas_Object *note;
     Evas_Object *vbox;
     appdata_s *ad;
     ui_list_page_data_s *ui_list_page_data;
@@ -12,14 +14,20 @@ typedef struct contact_form {
 void create_btn_on_click(void *data, Evas_Object *obj, void *event_info) {
     Eina_List *l;
     Evas_Object *phone_entry;
+    Evas_Object *email_entry;
     contact_s *contact = contact_repository_contact_s_new();
     
     contact_form_s *contact_form = (contact_form_s *) data;
     
     contact->firstname = strdup(elm_object_text_get(contact_form->firstname));
     contact->lastname = strdup(elm_object_text_get(contact_form->lastname));
+    
     EINA_LIST_FOREACH(contact_form->numbers, l, phone_entry) {
         contact->phone_numbers = eina_list_append(contact->phone_numbers, strdup(elm_object_text_get(phone_entry)));
+    }
+    
+    EINA_LIST_FOREACH(contact_form->emails, l, email_entry) {
+        contact->emails = eina_list_append(contact->emails, strdup(elm_object_text_get(email_entry)));
     }
     
     contact_repository_create(contact);
@@ -56,6 +64,20 @@ static void phone_on_change(void *data, Evas_Object *obj, void *event_info) {
     elm_box_pack_after(contact_form->vbox, entry, last_entry);
 } 
 
+static void email_on_change(void *data, Evas_Object *obj, void *event_info) {
+    contact_form_s *contact_form = (contact_form_s *) data;
+    Evas_Object *entry = ui_create_entry(contact_form->vbox, "Email");
+    elm_entry_input_panel_layout_set(entry, ELM_INPUT_PANEL_LAYOUT_EMAIL);
+    
+    Eina_List *l = eina_list_last(contact_form->emails);
+    Evas_Object *last_entry = (Evas_Object *)eina_list_data_get(l);
+    contact_form->emails = eina_list_append(contact_form->emails, entry);
+    evas_object_smart_callback_add(entry, "changed,user", email_on_change, contact_form);
+    evas_object_smart_callback_del(obj, "changed,user", email_on_change);
+    
+    elm_box_pack_after(contact_form->vbox, entry, last_entry);
+} 
+
 static Evas_Object *ui_create_page(appdata_s *ad, ui_list_page_data_s *ui_list_page_data) {
     contact_form_s *contact_form;
     Evas_Object *vbox;
@@ -87,6 +109,18 @@ static Evas_Object *ui_create_page(appdata_s *ad, ui_list_page_data_s *ui_list_p
     evas_object_smart_callback_add(entry, "changed,user", phone_on_change, contact_form);
     elm_entry_input_panel_layout_set(entry, ELM_INPUT_PANEL_LAYOUT_PHONENUMBER);
     elm_box_pack_end(vbox, entry);
+    elm_ext_vbox_add_separator(vbox);
+    
+    entry = ui_create_entry(vbox, "Email");
+    contact_form->emails = eina_list_append(contact_form->emails, entry);
+    evas_object_smart_callback_add(entry, "changed,user", email_on_change, contact_form);
+    elm_entry_input_panel_layout_set(entry, ELM_INPUT_PANEL_LAYOUT_EMAIL);
+    elm_box_pack_end(vbox, entry);
+    elm_ext_vbox_add_separator(vbox);
+    
+    contact_form->note = ui_create_entry(vbox, "Note");
+    elm_entry_single_line_set(contact_form->note, EINA_FALSE);
+    elm_box_pack_end(vbox, contact_form->note);
     elm_ext_vbox_add_separator(vbox);
     
     create_btn = elm_button_add(vbox);

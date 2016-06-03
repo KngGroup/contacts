@@ -10,6 +10,8 @@ typedef struct contact {
     char *lastname;
     char *default_phone;
     Eina_List *phone_numbers;
+    Eina_List *emails;
+    char *note;
 } contact_s;
 
 contact_s *contact_repository_contact_s_new();
