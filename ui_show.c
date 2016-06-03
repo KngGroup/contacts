@@ -58,7 +58,7 @@ static Evas_Object *create_contact_page(ui_show_page_data_s *page_data) {
     elm_ext_vbox_add_separator(vbox);
 
     box_append_label(vbox, "Phone: ");
-    box_append_label_value(vbox, page_data->contact->phone);
+    box_append_label_value(vbox, page_data->contact->default_phone);
     spacer = elm_ext_spacer_add(vbox);
     elm_box_pack_end(vbox, spacer);
     
@@ -75,8 +75,8 @@ static Evas_Object *create_contact_page(ui_show_page_data_s *page_data) {
 }
 
 void ui_show_contact_page(appdata_s *ad, contact_s *contact, ui_list_page_data_s *ui_list_page_data) {
-    free(contact->phone);
-    contact->phone = contact_repository_get_phone_by_id(contact->id);
+    free(contact->default_phone);
+    contact->default_phone = contact_repository_get_phone_by_id(contact->id);
 
     ui_show_page_data_s *page_data = malloc(sizeof (ui_show_page_data_s));
     page_data->appdata = ad;

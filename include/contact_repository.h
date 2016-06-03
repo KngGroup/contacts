@@ -8,8 +8,12 @@ typedef struct contact {
     char *display_name;
     char *firstname;
     char *lastname;
-    char *phone;
+    char *default_phone;
+    Eina_List *phone_numbers;
 } contact_s;
+
+contact_s *contact_repository_contact_s_new();
+void contact_repository_contact_s_free(contact_s * contact);
 
 Eina_List *contact_repository_find_all();
 void contact_repository_list_free(Eina_List *list);

@@ -1,9 +1,32 @@
 #include <contact_repository.h>
 
-static contact_s *hydrate(contacts_record_h record) {
+contact_s *contact_repository_contact_s_new() {
     contact_s *contact;
     contact = malloc(sizeof (contact_s));
     memset(contact, 0x0, sizeof (contact_s));
+    
+    return contact;
+}
+
+void contact_repository_contact_s_free(contact_s * contact) {
+    Eina_List *l;
+    char *phone_number;
+    
+    free(contact->display_name);
+    free(contact->firstname);
+    free(contact->lastname);
+    free(contact->default_phone);
+
+    EINA_LIST_FOREACH(contact->phone_numbers, l, phone_number) {
+        free(phone_number);
+    }
+
+    eina_list_free(contact->phone_numbers);
+    free(contact);
+}
+
+static contact_s *hydrate(contacts_record_h record) {
+    contact_s *contact = contact_repository_contact_s_new();
 
     contacts_record_get_int(record, _contacts_person.id, &contact->id);
     contacts_record_get_str(record, _contacts_person.display_name, &contact->display_name);
@@ -36,11 +59,7 @@ void contact_repository_list_free(Eina_List *list) {
     contact_s *contact;
     
     EINA_LIST_FOREACH(list, l, contact) {
-        free(contact->display_name);
-        free(contact->firstname);
-        free(contact->lastname);
-        free(contact->phone);
-        free(contact);
+        contact_repository_contact_s_free(contact);
     }
     
     eina_list_free(list);
@@ -48,6 +67,9 @@ void contact_repository_list_free(Eina_List *list) {
 
 void contact_repository_create(contact_s *contact) {
     int id = -1;
+    Eina_List *l;
+    char *phone_number;
+    
     contacts_record_h contact_record;
     contacts_record_h name;
     contacts_record_h number;
@@ -55,17 +77,20 @@ void contact_repository_create(contact_s *contact) {
     contacts_connect_on_thread();
 
     contacts_record_create(_contacts_contact._uri, &contact_record);
+    
     contacts_record_create(_contacts_name._uri, &name);
-
     contacts_record_set_str(name, _contacts_name.first, contact->firstname);
     contacts_record_set_str(name, _contacts_name.last, contact->lastname);
     contacts_record_add_child_record(contact_record, _contacts_contact.name, name);
 
-    contacts_record_create(_contacts_number._uri, &number);
-    contacts_record_set_str(number, _contacts_number.number, contact->phone);
-    contacts_record_add_child_record(contact_record, _contacts_contact.number, number);
+    EINA_LIST_FOREACH(contact->phone_numbers, l, phone_number) {
+        contacts_record_create(_contacts_number._uri, &number);
+        contacts_record_set_str(number, _contacts_number.number, phone_number);
+        contacts_record_add_child_record(contact_record, _contacts_contact.number, number);
+    }
     
     contacts_db_insert_record(contact_record, &id);
+    contacts_record_destroy(contact_record, TRUE);
     
     contacts_disconnect_on_thread();
 }
@@ -124,7 +149,7 @@ void contact_repository_update(contact_s *contact) {
     contacts_record_set_str(name, _contacts_name.last, contact->lastname);
     
     contacts_record_get_child_record_at_p(contact_record, _contacts_contact.number, 0, &phone);
-    contacts_record_set_str(phone, _contacts_number.number, contact->phone);
+    contacts_record_set_str(phone, _contacts_number.number, contact->default_phone);
     
     contacts_db_update_record(contact_record);
     

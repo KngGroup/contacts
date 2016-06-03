@@ -10,16 +10,20 @@ typedef struct contact_form {
 } contact_form_s;
 
 void create_btn_on_click(void *data, Evas_Object *obj, void *event_info) {
-    contact_form_s *contact_form = (contact_form_s *) data;
-    contact_s contact;
-    contact.firstname = strdup(elm_object_text_get(contact_form->firstname));
-    contact.lastname = strdup(elm_object_text_get(contact_form->lastname));
-    contact.phone = strdup(elm_object_text_get(eina_list_data_get(contact_form->numbers)));
+    Eina_List *l;
+    Evas_Object *phone_entry;
+    contact_s *contact = contact_repository_contact_s_new();
     
-    contact_repository_create(&contact);
-    free(contact.firstname);
-    free(contact.lastname);
-    free(contact.phone);
+    contact_form_s *contact_form = (contact_form_s *) data;
+    
+    contact->firstname = strdup(elm_object_text_get(contact_form->firstname));
+    contact->lastname = strdup(elm_object_text_get(contact_form->lastname));
+    EINA_LIST_FOREACH(contact_form->numbers, l, phone_entry) {
+        contact->phone_numbers = eina_list_append(contact->phone_numbers, strdup(elm_object_text_get(phone_entry)));
+    }
+    
+    contact_repository_create(contact);
+    contact_repository_contact_s_free(contact);
     
     ui_list_refresh_contacts(contact_form->ui_list_page_data);
     elm_naviframe_item_pop(contact_form->ad->naviframe);
