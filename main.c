@@ -1,25 +1,21 @@
 #include "main.h"
 #include "ui_list.h"
 
-static Evas_Event_Flags guesture_on_line_end(void *data, void *event_info) {
-    Elm_Gesture_Line_Info *p = (Elm_Gesture_Line_Info *) event_info;
-    dlog_print(DLOG_DEBUG, PACKAGE, "guesture_on_line_end angle=<%lf> x1,y1=<%d,%d> x2,y2=<%d,%d> tx,ty=<%u,%u> n=<%u>,\n",
-            p->angle, p->momentum.x1, p->momentum.y1, p->momentum.x2, p->momentum.y2,
-            p->momentum.tx, p->momentum.ty, p->momentum.n);
-
-    if (p->angle > 170 && p->angle < 200 && p->momentum.y1 > 40 && p->momentum.y1 < 110
-        ||     
-        p->angle > 70 && p->angle < 105
-    ) {
+static Eina_Bool _key_down_cb(void *data, int type, void *ev) {
+    Ecore_Event_Key *event = ev;
+    
+    if (!strcmp("XF86Stop", event->key)) {
         appdata_s *ad = (appdata_s *) data;
         elm_naviframe_item_pop(ad->naviframe);
 
         if (NULL == elm_naviframe_top_item_get(ad->naviframe)) {
             elm_exit();
         }
+        
+        return ECORE_CALLBACK_DONE;
     }
     
-    return EVAS_EVENT_FLAG_ON_HOLD;
+    return ECORE_CALLBACK_PASS_ON;
 }
 
 void create_gui(appdata_s *ad) {
@@ -35,17 +31,10 @@ void create_gui(appdata_s *ad) {
     elm_object_content_set(ad->conformant, ad->naviframe);
     evas_object_show(ad->naviframe);
     
-    Evas_Object *g; // Gesture layer object
-    g = elm_gesture_layer_add(ad->win);
-    evas_object_repeat_events_set(ad->win, EINA_TRUE);
-    elm_gesture_layer_attach(g, ad->naviframe);
-    evas_object_repeat_events_set(ad->naviframe, EINA_TRUE);
-    
-    elm_gesture_layer_cb_set(g, ELM_GESTURE_N_LINES, ELM_GESTURE_STATE_END, 
-                         guesture_on_line_end, ad);
-    
     ui_show_list_page(ad);
     evas_object_show(ad->win);
+    
+    ecore_event_handler_add(ECORE_EVENT_KEY_DOWN, _key_down_cb, ad);
 }
 
 EAPI_MAIN int
