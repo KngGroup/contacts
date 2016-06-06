@@ -150,7 +150,7 @@ static void on_phone_type_label_clicked(void *data, Evas_Object *obj, void *even
         evas_object_smart_callback_add(radio, "changed", on_phone_type_changed, obj);
     }
     
-    elm_radio_value_set(radio_group, phone_types[0]);
+    elm_radio_value_set(radio_group, get_phone_type_by_label(elm_object_text_get(obj)));
     evas_object_show(vbox);
     
     elm_object_content_set(popup, vbox);
