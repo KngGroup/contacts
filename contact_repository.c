@@ -32,6 +32,18 @@ void contact_repository_contact_s_free(contact_s * contact) {
     free(contact);
 }
 
+phone_s *contact_repository_phone_s_new() {
+    phone_s *phone;
+    phone = malloc(sizeof (phone_s));
+    memset(phone, 0x0, sizeof (phone_s));
+    
+    return phone;
+}
+
+void contact_repository_phone_s_free(phone_s *phone) {
+    free(phone->number);
+}
+
 static contact_s *hydrate(contacts_record_h record) {
     contact_s *contact = contact_repository_contact_s_new();
 
@@ -75,7 +87,7 @@ void contact_repository_list_free(Eina_List *list) {
 void contact_repository_create(contact_s *contact) {
     int id = -1;
     Eina_List *l;
-    char *phone_number;
+    phone_s *phone;
     char *email;
     
     contacts_record_h contact_record;
@@ -93,9 +105,12 @@ void contact_repository_create(contact_s *contact) {
     contacts_record_set_str(name, _contacts_name.last, contact->lastname);
     contacts_record_add_child_record(contact_record, _contacts_contact.name, name);
 
-    EINA_LIST_FOREACH(contact->phone_numbers, l, phone_number) {
+    EINA_LIST_FOREACH(contact->phone_numbers, l, phone) {
         contacts_record_create(_contacts_number._uri, &number);
-        contacts_record_set_str(number, _contacts_number.number, phone_number);
+        
+        contacts_record_set_str(number, _contacts_number.number, phone->number);
+        contacts_record_set_int(number, _contacts_number.type, phone->type);
+        
         contacts_record_add_child_record(contact_record, _contacts_contact.number, number);
     }
 
