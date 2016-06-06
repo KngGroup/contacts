@@ -25,15 +25,22 @@ Evas_Object *elm_ext_separator_add(Evas_Object *parent) {
 Evas_Object *elm_ext_vbox_add_separator(Evas_Object *box) {
     Evas_Object *spacer, *separator;
     
-    spacer = elm_ext_spacer_add(box);
-    elm_box_pack_end(box, spacer);
+    Evas_Object *vbox = elm_box_add(box);
+    evas_object_size_hint_weight_set(vbox, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+    evas_object_size_hint_align_set(vbox, EVAS_HINT_FILL, EVAS_HINT_FILL);
     
-    separator = elm_ext_separator_add(box);
-    elm_box_pack_end(box, separator);
+    spacer = elm_ext_spacer_add(vbox);
+    elm_box_pack_end(vbox, spacer);
+    
+    separator = elm_ext_separator_add(vbox);
+    elm_box_pack_end(vbox, separator);
     evas_object_show(separator);
     
-    spacer = elm_ext_spacer_add(box);
-    elm_box_pack_end(box, spacer);
+    spacer = elm_ext_spacer_add(vbox);
+    elm_box_pack_end(vbox, spacer);
     
-    return separator;
+    evas_object_show(vbox);
+    elm_box_pack_end(box, vbox);
+    
+    return vbox;
 }

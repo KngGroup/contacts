@@ -219,6 +219,7 @@ static Evas_Object *ui_create_page(appdata_s *ad, ui_list_page_data_s *ui_list_p
     Evas_Object *scroller;
     Evas_Object *create_btn;
     Evas_Object *entry;
+    Evas_Object *separator;
     
     vbox = elm_box_add(ad->win);
     elm_box_align_set(vbox, 0, 0);
@@ -237,9 +238,9 @@ static Evas_Object *ui_create_page(appdata_s *ad, ui_list_page_data_s *ui_list_p
     
     contact_form->lastname = ui_create_entry(vbox, "Lastname");
     elm_box_pack_end(vbox, contact_form->lastname);
-    elm_ext_vbox_add_separator(vbox);
+    separator = elm_ext_vbox_add_separator(vbox);
     
-    ui_append_phone_entry_after(contact_form, contact_form->lastname);
+    ui_append_phone_entry_after(contact_form, separator);
     elm_ext_vbox_add_separator(vbox);
     
     entry = ui_create_entry(vbox, "Email");
